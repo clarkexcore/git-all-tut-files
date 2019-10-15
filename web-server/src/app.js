@@ -1,6 +1,11 @@
+//Require Dependencies
 const express = require('express');
 const path = require("path");
 const hbs = require('hbs');
+
+//Require Utils Files.
+const geocode = require('./utils/geocode');
+const forecast = require('./utils/forecast');
 
 const app = express();
 
@@ -40,12 +45,44 @@ app.get('/help', (req, res) => {
 })
 
 app.get('/weather', (req, res) => {
-    res.send({
-        currentTemp: 17,
-        location: "Toronto, Ontario, Canada",
-        percentPrep: 0,
-        summary: "This is the summary of the weather."
+    const city = req.query.address;
+    if(!city){
+        return res.send({
+            error: "Must provide an address. PLEASE."
+        })
+    }
+    geocode(city, (error, {lat, lon, location}) => {
+        if(error){
+            return res.send({
+                error
+            });
+        }
+        forecast(lat, lon, (error, {summary, currentTemp, precip}) => {
+            if(error){
+                return res.send({
+                    error
+                });
+            }
+            res.send({
+                location,
+                summary,
+                currentTemp,
+                precip
+            })
+        })
     });
+})
+
+app.get('/products', (req, res) => {
+    console.log(req.query);
+    if(!req.query.search){
+        return res.send({
+            error: "You must provide a search term."
+        })
+    }
+    res.send({
+        products: []
+    })
 })
 
 app.get('/help/*', (req, res) => {
