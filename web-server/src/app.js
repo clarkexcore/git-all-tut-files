@@ -51,13 +51,13 @@ app.get('/weather', (req, res) => {
             error: "Must provide an address. PLEASE."
         })
     }
-    geocode(city, (error, {lat, lon, location}) => {
+    geocode(city, (error, {lat, lon, location} = {}) => {
         if(error){
             return res.send({
                 error
             });
         }
-        forecast(lat, lon, (error, {summary, currentTemp, precip}) => {
+        forecast(lat, lon, (error, {summary, currentTemp, precip} = {}) => {
             if(error){
                 return res.send({
                     error

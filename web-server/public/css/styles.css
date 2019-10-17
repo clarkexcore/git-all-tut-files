@@ -48,3 +48,15 @@ header a:hover{
     width: 100%;
     max-width: 250px;
 }
+
+input{
+    border: 1px solid #ccc;
+    padding: 8px;
+}
+button{
+    cursor: pointer;
+    border: 1px solid #888;
+    background: #888;
+    color: #fff;
+    padding: 8px;
+}
